@@ -1,0 +1,66 @@
+Question:
+Fashion Haven Shopping Problem
+
+You are planning a shopping spree at Fashion Haven, where you can buy a variety of items. Each item has a price, and purchasing an item earns you a certain gift voucher value. You are given a total budget K, and you want to maximize the total gift voucher value you can accumulate while staying within your budget.
+
+Input:
+
+The first input line contains two integers N and K, where N is the number of items and K is the budget you have.
+The second line contains N integers, where each integer represents the gift voucher value you receive when you purchase the respective item.
+The third line contains N integers, where each integer represents the price of the respective item.
+Output:
+
+Output the maximum total gift voucher value you can obtain by spending at most the given budget K.
+Constraints:
+
+You cannot buy a fraction of an item. You either buy the item or you don't.
+You can purchase at most one of each item.
+________________________________________________________________________________________________________
+import java.util.Scanner;
+
+public class FashionHavenShopping {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        // Read number of items and budget
+        int N = sc.nextInt(); // Number of items
+        int K = sc.nextInt(); // Budget
+        
+        // Make sure that N matches the number of values in the next two lines
+        if (N <= 0 || K <= 0) {
+            System.out.println("Invalid input!");
+            return; // Early exit for invalid input
+        }
+        
+        // Read gift voucher values
+        int[] G = new int[N];
+        for (int i = 0; i < N; i++) {
+            G[i] = sc.nextInt();
+        }
+        
+        // Read item prices
+        int[] P = new int[N];
+        for (int i = 0; i < N; i++) {
+            P[i] = sc.nextInt();
+        }
+        
+        // DP array to store max gift voucher value for each budget
+        int[] dp = new int[K + 1];  // Budget limit is K, so array size is K+1
+        
+        // Traverse through each item
+        for (int i = 0; i < N; i++) {
+            // Make sure that price of item is within the budget
+            if (P[i] <= K) {
+                // Traverse the dp array from end to start (to avoid overwriting)
+                for (int j = K; j >= P[i]; j--) {
+                    dp[j] = Math.max(dp[j], dp[j - P[i]] + G[i]);
+                }
+            }
+        }
+        
+        // The maximum gift voucher value we can get within the budget is in dp[K]
+        System.out.println(dp[K]);
+        
+        sc.close();
+    }
+} 
